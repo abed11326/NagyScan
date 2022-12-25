@@ -5,8 +5,10 @@ app.listen(9999);
 app.set('view engine', 'pug');
 app.set('views', __dirname+'/views');
 app.use(express.static('public'));
-//app.use(express.urlencoded({extended:true}));
+app.use(express.urlencoded({extended:true}));
 //app.use(express.json());
+const bcrypt = require('bcrypt');
+
 
 
 // GET requests
@@ -25,24 +27,43 @@ app.get('/signupd', (req, res)=>{
 app.get('/signupp', (req, res)=>{
     res.render('signup_p', {title:'Patient Sign Up'});
 });
-
     // TODO: Add home_d and home_p
-
 app.get('/result', (req, res)=>{
     res.render('result', {title:'Test Result'});
 });
-app.use((req, res)=>{
-    res.status(404).render('404', {title:'Page Not found'});
-});
+
 
 
 // POST requests
 app.post('/login', (req, res)=>{
     var {username, password, entity} = req.body;
+    var user = "TODO: search for it in the entity's table in the database ";
+    if(user){
+        var auth = bcrypt.compareSync(password, user.password);
+        if(auth){
+            // TODO: handle successfully login
+        } else{
+            // TODO: handle incorrect password
+        }
+    } else{
+        // TODO: handle incorrect username
+    }
 });
 app.post('/signupd', (req, res)=>{
-    // console.log(req.body);
+    var {username, password} = req.body;
+    var salt = bcrypt.genSaltSync();
+    password = bcrypt.hashSync(password, salt);
+    // TODO: add it to the doctors table in database
 });
 app.post('/signupp', (req, res)=>{
-    // console.log(req.body);
+    var {username, password, hyper_tension, diabetes} = req.body;
+    var salt = bcrypt.genSaltSync();
+    password = bcrypt.hashSync(password, salt);
+    // TODO: add it to the patients table in database
+});
+
+
+// 404 page
+app.use((req, res)=>{
+    res.status(404).render('404', {title:'Page Not found'});
 });
