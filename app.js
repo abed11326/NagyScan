@@ -1,13 +1,16 @@
 // initialize required utilities
 const express = require('express');
+const cookieParser = require('cookie-parser');
+const bcrypt = require('bcrypt');
+const dbControl = require(__dirname+'/controllers/dbController.js');
 const app = express();
 app.listen(9999);
 app.set('view engine', 'pug');
 app.set('views', __dirname+'/views');
+app.use(cookieParser());
 app.use(express.static('public'));
 app.use(express.urlencoded({extended:true}));
 //app.use(express.json());
-const bcrypt = require('bcrypt');
 
 
 
@@ -51,15 +54,29 @@ app.post('/login', (req, res)=>{
 });
 app.post('/signupd', (req, res)=>{
     var {username, password} = req.body;
+    // TODO: vaildation: must be new user
     var salt = bcrypt.genSaltSync();
     password = bcrypt.hashSync(password, salt);
-    // TODO: add it to the doctors table in database
+    // TODO: test the below function
+    dbControl.addUser({
+        username: username, 
+        password:password, 
+        entity:'D'
+    });
 });
 app.post('/signupp', (req, res)=>{
     var {username, password, hyper_tension, diabetes} = req.body;
+    // TODO: vaildation: must be new user
     var salt = bcrypt.genSaltSync();
     password = bcrypt.hashSync(password, salt);
-    // TODO: add it to the patients table in database
+    // TODO: test the below function
+    dbControl.addUser({
+        username: username, 
+        password:password, 
+        entity:'P', 
+        hyper_tension:hyper_tension, 
+        diabetes:diabetes
+    });
 });
 
 
