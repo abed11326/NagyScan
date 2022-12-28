@@ -20,10 +20,10 @@ const createToken = (id)=>{
 
 // GET requests
 app.get('/', (req, res)=>{
-    res.render('home', {title:'Home'});
+    res.render('home', {title:'Home', cssFile:'home'});
 });
 app.get('/about', (req, res)=>{
-    res.render('about', {title:'About us'});
+    res.render('about', {title:'About us', cssFile:'about'});
 });
 app.get('/login', (req, res)=>{
     res.render('login', {title:'Log In'});
