@@ -2,6 +2,7 @@
 const express = require('express');
 const cookieParser = require('cookie-parser');
 const bcrypt = require('bcrypt');
+const jwt = require('jsonwebtoken');
 const dbControl = require(__dirname+'/controllers/dbController.js');
 const app = express();
 app.listen(9999);
@@ -12,7 +13,10 @@ app.use(express.static('public'));
 app.use(express.urlencoded({extended:true}));
 //app.use(express.json());
 
-
+const maxAge = 100*24*60*60; // in seconds
+const createToken = (id)=>{
+    return jwt.sign({id}, "Nagy@16/Aug", {expiresIn: maxAge});  
+};
 
 // GET requests
 app.get('/', (req, res)=>{
@@ -30,7 +34,12 @@ app.get('/signupd', (req, res)=>{
 app.get('/signupp', (req, res)=>{
     res.render('signup_p', {title:'Patient Sign Up'});
 });
-    // TODO: Add home_d and home_p
+app.get('/home_d', (req, res)=>{
+    res.render('home_d', {title:'Welcome'});
+});
+app.get('/home_p', (req, res)=>{
+    res.render('home_p', {title:'Welcome'});
+});
 app.get('/result', (req, res)=>{
     res.render('result', {title:'Test Result'});
 });
@@ -39,12 +48,18 @@ app.get('/result', (req, res)=>{
 
 // POST requests
 app.post('/login', (req, res)=>{
-    var {username, password, entity} = req.body;
-    var user = "TODO: search for it in the entity's table in the database ";
-    if(user){
-        var auth = bcrypt.compareSync(password, user.password);
+    var {username, password} = req.body;
+    var user = dbControl.searchUser(username);
+    if(user.state==1){
+        var auth = bcrypt.compareSync(password, user.stored_password);
         if(auth){
-            // TODO: handle successfully login
+            var token = createToken(username);
+            res.cookie('jwt', token, {maxAge:maxAge*1000});
+            if(user.entity=='d'){
+                // TODO: route to '/home_d'
+            }else if(user.entity=='p'){
+                // TODO: route to '/home_p'
+            }
         } else{
             // TODO: handle incorrect password
         }
@@ -63,6 +78,9 @@ app.post('/signupd', (req, res)=>{
         password:password, 
         entity:'D'
     });
+    var token = createToken(username);
+    res.cookie('jwt', token, {maxAge:maxAge*1000});
+    // TODO: route to '/home_d'
 });
 app.post('/signupp', (req, res)=>{
     var {username, password, hyper_tension, diabetes} = req.body;
@@ -77,6 +95,9 @@ app.post('/signupp', (req, res)=>{
         hyper_tension:hyper_tension, 
         diabetes:diabetes
     });
+    var token = createToken(username);
+    res.cookie('jwt', token, {maxAge:maxAge*1000});
+    // TODO: route to '/home_p'
 });
 
 
