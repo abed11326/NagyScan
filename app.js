@@ -15,7 +15,7 @@ app.use(express.urlencoded({extended:true}));
 
 const maxAge = 100*24*60*60; // in seconds
 const createToken = (id)=>{
-    return jwt.sign({id}, "Nagy@16-Aug-1995&&Haroon@06-Jan-1999", {expiresIn: maxAge});  
+    return jwt.sign({id}, "Nagy@16-Aug-1995__&&__Haroon@06-Jan-1999", {expiresIn: maxAge});  
 };
 
 // GET requests
@@ -106,5 +106,5 @@ app.post('/signup_p', (req, res)=>{
 
 // 404 page
 app.use((req, res)=>{
-    res.status(404).render('404', {title:'Page Not found'});
+    res.status(404).render('404', {title:'Page Not found', cssFile:'404'});
 });
