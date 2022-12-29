@@ -15,7 +15,7 @@ app.use(express.urlencoded({extended:true}));
 
 const maxAge = 100*24*60*60; // in seconds
 const createToken = (id)=>{
-    return jwt.sign({id}, "Nagy@16-Aug-1995", {expiresIn: maxAge});  
+    return jwt.sign({id}, "Nagy@16-Aug-1995&&Haroon@06-Jan-1999", {expiresIn: maxAge});  
 };
 
 // GET requests
