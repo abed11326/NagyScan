@@ -1,9 +1,17 @@
-//- TODO: include head and nav_bar 
+include partials/head.pug
 
+.signup-form
+  form(action='/signup_d' method='POST')
+    h2 Sign Up as a Doctor
+    p Please fill out this form to create an account
+    .form-group
+      label(for='username') Username
+      input#username(type='text' name='username' required='')
+    .form-group
+      label(for='password') Password
+      input#password(type='password' name='password' required='')
+    .form-group
+      button.signupbtn(type='submit') Sign Up
+      button.cancelbtn(type='button') Cancel
 
-//- TODO: implement body content
-
-
-//- TODO: include footer
-
-
+include partials/footer.pug

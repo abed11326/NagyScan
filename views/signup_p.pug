@@ -1,9 +1,28 @@
-//- TODO: include head and nav_bar 
+include partials/head.pug
 
+.signup-form
+  form(action='/signup_p' method='POST')
+    h2 Sign Up as a Patient
+    p Please fill out this form to create an account
+    .form-group
+      label(for='username') Username
+      input#username(type='text' name='username' required='')
+    .form-group
+      label(for='password') Password
+      input#password(type='password' name='password' required='')
+    // Additional fields for patients
+    .patient-fields
+      h3 Patient Information
+      .form-group
+        input#diabetes(type='checkbox' name='diabetes' value='diabetes')
+        label(for='diabetes')  Have Diabetes
+        br
+      .form-group
+        input#hypertension(type='checkbox' name='hypertension' value='hypertension')
+        label(for='hypertension')  Have Hypertension
+        br
+      .form-group
+        button.signupbtn(type='submit') Sign Up
+        button.cancelbtn(type='button') Cancel
 
-//- TODO: implement body content
-
-
-//- TODO: include footer
-
-
+include partials/footer.pug

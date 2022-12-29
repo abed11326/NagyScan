@@ -29,10 +29,10 @@ app.get('/login', (req, res)=>{
     res.render('login', {title:'Log In'});
 });
 app.get('/signupd', (req, res)=>{
-    res.render('signup_d', {title:'Doctor Sign Up'});
+    res.render('signup_d', {title:'Doctor Sign Up', cssFile:'signup'});
 });
 app.get('/signupp', (req, res)=>{
-    res.render('signup_p', {title:'Patient Sign Up'});
+    res.render('signup_p', {title:'Patient Sign Up', cssFile:'signup'});
 });
 app.get('/home_d', (req, res)=>{
     res.render('home_d', {title:'Welcome'});
