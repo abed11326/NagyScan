@@ -56,9 +56,9 @@ app.post('/login', (req, res)=>{
             var token = createToken(username);
             res.cookie('jwt', token, {maxAge:maxAge*1000});
             if(user.entity=='d'){
-                // TODO: route to '/home_d'
+                res.redirect('/home_d');
             }else if(user.entity=='p'){
-                // TODO: route to '/home_p'
+                res.redirect('/home_p');
             }
         } else{
             // TODO: handle incorrect password
@@ -70,14 +70,14 @@ app.post('/login', (req, res)=>{
 app.post('/signup_d', (req, res)=>{
     var {username, password} = req.body;
     // TODO: vaildation: must be new user
-    //var salt = bcrypt.genSaltSync();
-    //password = bcrypt.hashSync(password, salt);
+    var salt = bcrypt.genSaltSync();
+    password = bcrypt.hashSync(password, salt);
     // TODO: test the below function
-    // dbControl.addUser({
-    //     username: username, 
-    //     password:password, 
-    //     entity:'D'
-    // });
+    dbControl.addUser({
+        username: username, 
+        password:password, 
+        entity:'D'
+    });
     var token = createToken(username);
     res.cookie('jwt', token, {maxAge:maxAge*1000});
     res.redirect('/home_d');
@@ -85,19 +85,19 @@ app.post('/signup_d', (req, res)=>{
 app.post('/signup_p', (req, res)=>{
     var username = req.body.username;
     var password = req.body.password;
-    var hypertension = req.body.hypertension||'no';
-    var diabetes = req.body.diabetes||'no';
+    var hypertension = req.body.hypertension||'No';
+    var diabetes = req.body.diabetes||'No';
     // TODO: vaildation: must be new user
-    //var salt = bcrypt.genSaltSync();
-    //password = bcrypt.hashSync(password, salt);
+    var salt = bcrypt.genSaltSync();
+    password = bcrypt.hashSync(password, salt);
     // TODO: test the below function
-    // dbControl.addUser({
-    //     username: username, 
-    //     password:password, 
-    //     entity:'P', 
-    //     hypertension:hypertension, 
-    //     diabetes:diabetes
-    // });
+    dbControl.addUser({
+        username: username, 
+        password:password, 
+        entity:'P', 
+        hypertension:hypertension, 
+        diabetes:diabetes
+    });
     var token = createToken(username);
     res.cookie('jwt', token, {maxAge:maxAge*1000});
     res.redirect('/home_p');
