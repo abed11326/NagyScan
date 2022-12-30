@@ -1,9 +1,21 @@
-//- TODO: include head and nav_bar 
-
-
-//- TODO: implement body content
-
-
-//- TODO: include footer
-
-
+include partials/head.pug
+header
+  img.logo(src='Nagy Scan.svg')
+  h1 Welcome, Dr Nagy
+section.patient-info
+  h2 Patient-Info:
+  p Name: John Doe
+  p Diabetes: Yes
+  p Hypertension: Yes
+section.test-results
+  h2 Test Results
+  table
+    tr
+      th Test
+      th Result
+    tr
+      td COVID-19
+      td Negative
+  button.print-button(onclick='window.print()') Print Results
+  p Thank you for choosing us for your healthcare needs.
+include partials/footer.pug

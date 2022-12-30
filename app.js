@@ -26,7 +26,7 @@ app.get('/about', (req, res)=>{
     res.render('about', {title:'About us', cssFile:'about'});
 });
 app.get('/login', (req, res)=>{
-    res.render('login', {title:'Log In',cssFile:'signup'});
+    res.render('login', {title:'Log In', cssFile:'login'});
 });
 app.get('/signup_d', (req, res)=>{
     res.render('signup_d', {title:'Doctor Sign Up', cssFile:'signup'});
@@ -41,7 +41,7 @@ app.get('/home_p', (req, res)=>{
     res.render('home_p', {title:'Welcome'});
 });
 app.get('/result', (req, res)=>{
-    res.render('result', {title:'Test Result'});
+    res.render('result', {title:'Test Result', cssFile:'result'});
 });
 
 

@@ -1,7 +1,6 @@
 include partials/head.pug
-
 .form
-  form(action='/signup_d' method='POST')
+  form(action='/login' method='POST')
     h2 Login
     .form-group
       label(for='username') Username
@@ -10,7 +9,10 @@ include partials/head.pug
       label(for='password') Password
       input#password(type='password' name='password' required='')
     .form-group
-      button.signupbtn(type='submit') Login
+      button.signupbtn(type='submit') Sign Up
       button.cancelbtn(type='button') Cancel
-
+    p Not a member yet?
+    .form-group
+      button.patientbtn(type='button') Sign Up as Patient
+      button.doctorbtn(type='button') Sign Up as Doctor
 include partials/footer.pug

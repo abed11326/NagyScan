@@ -1,0 +1,80 @@
+* {
+      margin: 0;
+      padding: 0;
+      font-family: sans-serif;
+    }
+  
+    body {
+      background-color: #f2f2f2;
+    }
+    header {
+      text-align: center;
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      padding: 10px;
+      background-color: #333;
+      color: white;
+    }
+    .logo {
+      width: 150px;
+      margin-right: auto;
+      height: 150px;
+      justify-content: flex-end;
+      border: 3px solid  #333;;
+      border-radius: 50%;
+      box-shadow: 0px 2px 4px rgba(0, 0, 0, 0.1);
+    }
+    h1
+     {
+      font-family: "Poppins", sans-serif;  
+      margin-right: 500px;
+    }
+    h2{
+      font-family: "Poppins", sans-serif;
+    }
+  
+    .patient-info {
+      margin: 20px;
+    }
+  
+    .patient-info p {
+      font-size: 18px;
+      margin-bottom: 5px;
+    }
+  
+    .test-results {
+      margin: 20px;
+    }
+  
+    .test-results h2 {
+      margin-bottom: 20px;
+    }
+  
+  
+    .test-results table {
+      width: 100%;
+      border-collapse: collapse;
+    }
+  
+    .test-results th,
+    .test-results td {
+      border: 1px solid #ddd;
+      padding: 8px
+    }
+    .print-button {
+      display: block;
+      width: 150px;
+      margin: 0 auto;
+      background-color: #4CAF50;
+      color: white;
+      text-align: center;
+      padding: 14px;
+      border: none;
+      cursor: pointer;
+    }
+    
+    .print-button:hover {
+      background-color: #3e8e41;
+    }
+    
