@@ -38,7 +38,7 @@ app.get('/home_d', (req, res)=>{
     res.render('home_d', {title:'Welcome'});
 });
 app.get('/home_p', (req, res)=>{
-    res.render('home_p', {title:'Welcome'});
+    res.render('home_p', {title:'Welcome',cssFile:'home_p'});
 });
 app.get('/result', (req, res)=>{
     res.render('result', {title:'Test Result', cssFile:'result'});
