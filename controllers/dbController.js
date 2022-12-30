@@ -1,4 +1,4 @@
-const mysql = require('mysql2');
+const mysql = require('mysql2/promise');
 
 // create the connection to database
 const connection = mysql.createConnection({
@@ -13,11 +13,11 @@ const addUser = (user)=>{
     var username = user.username;
     var password = user.password;
     var entity = user.entity;
-    if(entity=='D'){
+    if(entity=='d'){
         connection.query(
             `INSERT INTO Doctor (user_name, password) VALUES ("${username}", "${password}");`
         );
-    } else if(entity=='P'){
+    } else if(entity=='p'){
         var hypertension = user.hypertension;
         var diabetes = user.diabetes;
         if(hypertension=='hypertension'){
@@ -40,16 +40,44 @@ const getPatHist = (pat_username)=>{
 const getPatDis = (pat_username)=>{
     // TODO: function select diseases of a specific patient
 };
-const searchUser = (username)=>{
-    connection.query(
-        `SELECT user_name from Patient WHERE user_name == "${username}"`,
-        (err, results)=> {
-            console.log(results);
+async function searchUser(username){
+    var state = 0;
+    var stored_password = 0;
+    var entity = 0;
+    await (await connection).query(
+        `SELECT * from Patient WHERE user_name = "${username}"`
+    ).then(function(result){
+        if (result[0].length > 0) {
+            state = 1;
+            stored_password = result[0][0].Password;
+            entity = 'p';
         }
-    );
+    });
+    if(state === 0){
+        await (await connection).query(
+            `SELECT * from Doctor WHERE user_name = "${username}"`
+        ).then(function(result){
+            if (result[0].length > 0) {
+                state = 1;
+                stored_password = result[0][0].Password;
+                entity = 'd';
+            }
+          });
+    }
+    return {state, stored_password, entity};
 };
-
+// const SelectAllElements = (username) =>{
+//     return new Promise((resolve, reject)=>{
+//         connection.query(`SELECT * from Doctor WHERE user_name = "${username}"`,  (error, elements)=>{
+//             if(error){
+//                 return reject(error);
+//             }
+//             return resolve(elements);
+//         });
+//     });
+// };
 module.exports = {
+    connection,
     addUser,
     addScan,
     getPatHist,

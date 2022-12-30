@@ -47,60 +47,69 @@ app.get('/result', (req, res)=>{
 
 
 // POST requests
-app.post('/login', (req, res)=>{
+app.post('/login', async (req, res)=>{
     var {username, password} = req.body;
-    var user = dbControl.searchUser(username);
-    // if(user.state==1){
-    //     var auth = bcrypt.compareSync(password, user.stored_password);
-    //     if(auth){
-    //         var token = createToken(username);
-    //         res.cookie('jwt', token, {maxAge:maxAge*1000});
-    //         if(user.entity=='d'){
-    //             res.redirect('/home_d');
-    //         }else if(user.entity=='p'){
-    //             res.redirect('/home_p');
-    //         }
-    //     } else{
-    //         // TODO: handle incorrect password
-    //     }
-    // } else{
-    //     // TODO: handle incorrect username
-    // }
+    var user = await dbControl.searchUser(username);    
+    if(user.state==1){
+        var auth = bcrypt.compareSync(password, user.stored_password);
+        if(auth){
+            var token = createToken(username);
+            res.cookie('jwt', token, {maxAge:maxAge*1000});
+            if(user.entity=='d'){
+                res.redirect('/home_d');
+            }else if(user.entity=='p'){
+                res.redirect('/home_p');
+            }
+        } else{
+            // TODO: handle incorrect password
+        }
+    } else{
+        // TODO: handle incorrect username
+    }
 });
-app.post('/signup_d', (req, res)=>{
+app.post('/signup_d', async(req, res)=>{
     var {username, password} = req.body;
-    // TODO: vaildation: must be new user
-    var salt = bcrypt.genSaltSync();
-    password = bcrypt.hashSync(password, salt);
-    // TODO: test the below function
-    dbControl.addUser({
-        username: username, 
-        password:password, 
-        entity:'D'
-    });
-    var token = createToken(username);
-    res.cookie('jwt', token, {maxAge:maxAge*1000});
-    res.redirect('/home_d');
+    var user = await dbControl.searchUser(username);
+    if(user.state==1){
+        //TODO: handle username already exists
+    }
+    else{
+        var salt = bcrypt.genSaltSync();
+        password = bcrypt.hashSync(password, salt);
+        dbControl.addUser({
+            username: username, 
+            password:password, 
+            entity:'d'
+        });
+        var token = createToken(username);
+        res.cookie('jwt', token, {maxAge:maxAge*1000});
+        res.redirect('/home_d');
+    }
 });
-app.post('/signup_p', (req, res)=>{
+app.post('/signup_p', async(req, res)=>{
     var username = req.body.username;
     var password = req.body.password;
     var hypertension = req.body.hypertension||'No';
     var diabetes = req.body.diabetes||'No';
-    // TODO: vaildation: must be new user
-    var salt = bcrypt.genSaltSync();
-    password = bcrypt.hashSync(password, salt);
-    // TODO: test the below function
-    dbControl.addUser({
-        username: username, 
-        password:password, 
-        entity:'P', 
-        hypertension:hypertension, 
-        diabetes:diabetes
-    });
-    var token = createToken(username);
-    res.cookie('jwt', token, {maxAge:maxAge*1000});
-    res.redirect('/home_p');
+    var user = await dbControl.searchUser(username);
+    if(user.state==1){
+        //TODO: handle username already exists
+    }
+    else{
+        var salt = bcrypt.genSaltSync();
+        password = bcrypt.hashSync(password, salt);
+        // TODO: test the below function
+        dbControl.addUser({
+            username: username, 
+            password:password, 
+            entity:'p', 
+            hypertension:hypertension, 
+            diabetes:diabetes
+        });
+        var token = createToken(username);
+        res.cookie('jwt', token, {maxAge:maxAge*1000});
+        res.redirect('/home_p');
+    }
 });
 
 
