@@ -1,9 +1,36 @@
-//- TODO: include head and nav_bar 
-
-
-//- TODO: implement body content
-
-
-//- TODO: include footer
-
-
+include partials/head.pug
+header
+  h1 Welcome Patient 
+  img.logo(src='Nagy Scan.svg' alt='Logo')
+main
+  section
+    h2 Medical State
+    p
+      | Diagnosed with diabetes: 
+      span#diabetes [YES]
+    p
+      | Diagnosed with hypertension: 
+      span#hypertension [NO]
+  section
+    h2 COVID-19 Test Results
+    p
+      | Date: 
+      span#detection-date [20/8/2022]
+    p
+      | Doctor ID: 
+      span#doctor-id [DOCTOR ID]
+    p
+      | COVID-19 test result: 
+      span#test-result.positive [Positive]
+  section
+    h2 COVID-19 Test Results
+    p
+      | Date: 
+      span#detection-date [20/8/2022]
+    p
+      | Doctor ID: 
+      span#doctor-id [DOCTOR ID]
+    p
+      | COVID-19 test result: 
+      span#test-result.negative [Negative]
+include partials/footer.pug      
