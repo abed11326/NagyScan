@@ -50,22 +50,22 @@ app.get('/result', (req, res)=>{
 app.post('/login', (req, res)=>{
     var {username, password} = req.body;
     var user = dbControl.searchUser(username);
-    if(user.state==1){
-        var auth = bcrypt.compareSync(password, user.stored_password);
-        if(auth){
-            var token = createToken(username);
-            res.cookie('jwt', token, {maxAge:maxAge*1000});
-            if(user.entity=='d'){
-                res.redirect('/home_d');
-            }else if(user.entity=='p'){
-                res.redirect('/home_p');
-            }
-        } else{
-            // TODO: handle incorrect password
-        }
-    } else{
-        // TODO: handle incorrect username
-    }
+    // if(user.state==1){
+    //     var auth = bcrypt.compareSync(password, user.stored_password);
+    //     if(auth){
+    //         var token = createToken(username);
+    //         res.cookie('jwt', token, {maxAge:maxAge*1000});
+    //         if(user.entity=='d'){
+    //             res.redirect('/home_d');
+    //         }else if(user.entity=='p'){
+    //             res.redirect('/home_p');
+    //         }
+    //     } else{
+    //         // TODO: handle incorrect password
+    //     }
+    // } else{
+    //     // TODO: handle incorrect username
+    // }
 });
 app.post('/signup_d', (req, res)=>{
     var {username, password} = req.body;

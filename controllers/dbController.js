@@ -14,9 +14,9 @@ const addUser = (user)=>{
     var password = user.password;
     var entity = user.entity;
     if(entity=='D'){
-        connection.query(`
-        INSERT INTO Doctor (user_name, password) VALUES ("${username}", "${password}");
-        `);
+        connection.query(
+            `INSERT INTO Doctor (user_name, password) VALUES ("${username}", "${password}");`
+        );
     } else if(entity=='P'){
         var hypertension = user.hypertension;
         var diabetes = user.diabetes;
@@ -26,9 +26,9 @@ const addUser = (user)=>{
         if(diabetes=='diabetes'){
             diabetes='Yes';
         }
-        connection.query(`
-        INSERT INTO Patient (user_name, password, Hypertension, Diabetes) VALUES ("${username}", "${password}", "${hypertension}", "${diabetes}");
-        `);
+        connection.query(
+            `INSERT INTO Patient (user_name, password, Hypertension, Diabetes) VALUES ("${username}", "${password}", "${hypertension}", "${diabetes}");`
+        );
     } 
 };
 const addScan = (scan)=>{
@@ -41,7 +41,12 @@ const getPatDis = (pat_username)=>{
     // TODO: function select diseases of a specific patient
 };
 const searchUser = (username)=>{
-    //TODO: search for a user in the database, return {if exists or not, entity, stored_password}
+    connection.query(
+        `SELECT user_name from Patient WHERE user_name == "${username}"`,
+        (err, results)=> {
+            console.log(results);
+        }
+    );
 };
 
 module.exports = {
