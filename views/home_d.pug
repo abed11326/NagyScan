@@ -1,7 +1,7 @@
 include partials/head.pug
 
 header
-  h1 Welcome Dr.D
+  h1 Welcome Dr.#{usn}
   a(href='/logout') Logout
 .container
   form(action='/scan' method='POST' enctype="multipart/form-data")

@@ -13,11 +13,11 @@ async function addUser(user){
     var username = user.username;
     var password = user.password;
     var entity = user.entity;
-    if(entity=='d'){
+    if(entity=='Doctor'){
         await (await connection).query(
             `INSERT INTO Doctor (user_name, password) VALUES ("${username}", "${password}");`
         );
-    } else if(entity=='p'){
+    } else if(entity=='Patient'){
         var hypertension = user.hypertension;
         var diabetes = user.diabetes;
         if(hypertension=='hypertension'){
@@ -31,16 +31,43 @@ async function addUser(user){
         );
     } 
 };
-const addScan = (scan)=>{
-    // TODO: function add a new scan
+// add new scan
+async function addScan(scan){
+    var d_un = scan.d_un;
+    var p_un = scan.p_un;
+    var date = scan.date; 
+    var res  = scan.res;
+    await (await connection).query(
+        `INSERT INTO Scan (Result, Date, D_user_name, P_user_name) VALUES ("${res}", "${date}", "${d_un}", "${p_un}");`
+    );
 };
-const getPatHist = (pat_username)=>{
-    // TODO: function select all scans from scans table for a specific patient
+// get patient's test history
+async function getPatHist(pat_username){
+    var hist = [];
+    await (await connection).query(
+        `SELECT * from Scan WHERE P_user_name = "${pat_username}"`
+    ).then(function(result){
+        if (result[0].length > 0) {
+            hist = result[0];
+        }
+    });
+    return(hist);
 };
-const getPatDis = (pat_username)=>{
-    // TODO: function select diseases of a specific patient
-    return({hypt:'NO', diab:'No'});
+// get patien'ts diseases
+async function getPatDis(pat_username){
+    var hypt;
+    var diab;
+    await (await connection).query(
+        `SELECT * from Patient WHERE user_name = "${pat_username}"`
+    ).then(function(result){
+        if (result[0].length > 0) {
+            hypt = result[0][0].Hypertension;
+            diab = result[0][0].Diabetes;
+        }
+    });
+    return({hypt:hypt, diab:diab});
 };
+// search for a user in the DB
 async function searchUser(username){
     var state = 0;
     var stored_password = 0;
