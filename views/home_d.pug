@@ -2,6 +2,7 @@ include partials/head.pug
 
 header
   h1 Welcome Dr.D
+  a(href='/logout') Logout
 .container
   form(action='/scan' method='POST' enctype="multipart/form-data")
     label(for='file-input') X-Ray Image

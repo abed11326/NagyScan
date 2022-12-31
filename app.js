@@ -36,25 +36,26 @@ app.get('/about', (req, res)=>{
     res.render('about', {title:'About us', cssFile:'about'});
 });
 app.get('/login', (req, res)=>{
+    var msg = req.query.msg||'';
     var req_tok = req.cookies.jwt;
     if(req_tok){
         var req_data = verifyToken(req_tok);
         if(req_data == 0){
-            res.render('login', {title:'Log In', cssFile:'login'});
+            res.render('login', {title:'Log In', cssFile:'login', msg:msg});
         }else{
-            res.redirect('/home');
+            res.redirect('/profile');
         }
     }else{
-        res.render('login', {title:'Log In', cssFile:'login'});
+        res.render('login', {title:'Log In', cssFile:'login', msg:msg});
     }
+    // var msg = req.query.msg||'';
+    // res.render('login', {title:'Log In', cssFile:'login', msg:msg});
 });
-app.get('/signup_d', (req, res)=>{
-    res.render('signup_d', {title:'Doctor Sign Up', cssFile:'signup'});
+app.get('/signup', (req, res)=>{
+    var msg=req.query.msg||'';
+    res.render('signup', {title:'Patient Sign Up', cssFile:'signup', msg:msg});
 });
-app.get('/signup_p', (req, res)=>{
-    res.render('signup_p', {title:'Patient Sign Up', cssFile:'signup'});
-});
-app.get('/home', async(req, res)=>{
+app.get('/profile', async(req, res)=>{
     var req_tok = req.cookies.jwt;
     if(req_tok){
         var req_data = verifyToken(req_tok);
@@ -77,6 +78,9 @@ app.get('/home', async(req, res)=>{
     }
 });
 app.get('/result', async(req, res)=>{
+    // console.log(req.query);
+    var p_un = req.query.p_un || '';
+    var t_res = req.query.t_res || '';
     var req_tok = req.cookies.jwt;
     if(req_tok){
         var req_data = verifyToken(req_tok);
@@ -86,21 +90,13 @@ app.get('/result', async(req, res)=>{
             var user = await dbControl.searchUser(req_data.id);
             if(user.state==1){
                 if(user.entity=='d'){
-                    // res.render('result', {title:'Test Result', cssFile:'result'});
-                    var pun_tok = req.cookies.pun;
-                    if(pun_tok){
-                        var pun_data = verifyToken(pun_tok);
-                        if(pun_data == 0){
-                            res.redirect('/home');
-                        }else{
-                            var dis = await dbControl.getPatDis(pun_data.id);
-                            res.render('result', {title:'Test Result', cssFile:'result', hypt:dis.hypt, diab:dis.diab});
-                        }
-                    }else{
-                        res.redirect('/home');
-                    }
+                    await dbControl.addScan({d_un:req_data.id, p_un:p_un, date:'2023-01-01', res:t_res});
+                    var dis = await dbControl.getPatDis(p_un);
+                    var hypt = dis.hypt;
+                    var diab = dis.diab;
+                    res.render('result', {title:'Test Result', cssFile:'result', d_un:req_data.id, p_un:p_un, t_res:t_res, hypt:hypt, diab:diab});
                 }else{
-                    res.redirect('/home');
+                    res.redirect('/profile');
                 }
             }else{
                 res.redirect('/login');
@@ -109,6 +105,10 @@ app.get('/result', async(req, res)=>{
     }else{
         res.redirect('/login');
     }
+});
+app.get('/logout', async (req, res)=>{
+    await res.cookie('jwt', 0, {maxAge:maxAge*1000});
+    res.redirect('/login');
 });
 
 
@@ -122,41 +122,42 @@ app.post('/login', async (req, res)=>{
         if(auth){
             var token = createToken(username);
             await res.cookie('jwt', token, {maxAge:maxAge*1000});
-            res.redirect('/home');
+            res.redirect('/profile');
         } else{
-            // TODO: handle incorrect password
+            res.redirect('/login?msg=Incorrect Password');
         }
     } else{
-        // TODO: handle incorrect username
+        res.redirect('/login?msg=Invalid Username');
     }
 });
-app.post('/signup_d', async(req, res)=>{
-    var {username, password} = req.body;
-    var user = await dbControl.searchUser(username);
-    if(user.state==1){
-        //TODO: handle username already exists
-    }
-    else{
-        var salt = bcrypt.genSaltSync();
-        password = bcrypt.hashSync(password, salt);
-        await dbControl.addUser({
-            username: username, 
-            password:password, 
-            entity:'d'
-        });
-        var token = await createToken(username);
-        await res.cookie('jwt', token, {maxAge:maxAge*1000});
-        await res.redirect('/home');
-    }
-});
-app.post('/signup_p', async(req, res)=>{
+// app.post('/signup_d', async(req, res)=>{
+//     var {username, password} = req.body;
+//     var user = await dbControl.searchUser(username);
+//     if(user.state==1){
+//         res.redirect('/signup_d?msg=Username already exists');
+//     }
+//     else{
+//         var salt = bcrypt.genSaltSync();
+//         password = bcrypt.hashSync(password, salt);
+//         await dbControl.addUser({
+//             username: username, 
+//             password:password, 
+//             entity:'d'
+//         });
+//         var token = await createToken(username);
+//         await res.cookie('jwt', token, {maxAge:maxAge*1000});
+//         await res.redirect('/profile');
+//     }
+// });
+app.post('/signup', async(req, res)=>{
     var username = req.body.username;
     var password = req.body.password;
-    var hypertension = req.body.hypertension||'No';
+    var entity = req.body.entity;
     var diabetes = req.body.diabetes||'No';
+    var hypertension = req.body.hypertension||'No';
     var user = await dbControl.searchUser(username);
     if(user.state==1){
-        //TODO: handle username already exists
+        res.redirect('/signup?msg=Username already exists');
     }
     else{
         var salt = bcrypt.genSaltSync();
@@ -164,22 +165,24 @@ app.post('/signup_p', async(req, res)=>{
         await dbControl.addUser({
             username: username, 
             password:password, 
-            entity:'p', 
-            hypertension:hypertension, 
-            diabetes:diabetes
+            entity:entity, 
+            diabetes:diabetes,
+            hypertension:hypertension 
         });
         var token = await createToken(username);
         await res.cookie('jwt', token, {maxAge:maxAge*1000});
-        await res.redirect('/home');
+        await res.redirect('/profile');
     }
 });
 app.post('/scan', async(req, res)=>{
     var form = new formidable.IncomingForm();
-    form.parse(req, function (err, fields, files) {
-      console.log(fields);
-      console.log(files);
+    await form.parse(req, await async function(err, fields, files) {
+    //   console.log(fields);
+    //   console.log(files);
+        var pun=fields.username;
+        // var t_res = ml_model(image);
+        res.redirect(`/result?p_un=${pun}&t_res=Negative`);
     });
-    res.redirect('/result');
 });
 
 

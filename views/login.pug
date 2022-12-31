@@ -1,18 +1,23 @@
 include partials/head.pug
+script(src='login.js')
 .form
   form(action='/login' method='POST')
     h2 Login
+    p(style="color:red") #{msg}
     .form-group
       label(for='username') Username
-      input#username(type='text' name='username' required='')
+      input#username(type='text' name='username' required='' oninput="validate_username()")
+      p(id='username_val' style="color:red") 
     .form-group
       label(for='password') Password
-      input#password(type='password' name='password' required='')
+      input#password(type='password' name='password' required='' oninput="validate_password()")
+      p(id='password_val' style="color:red") 
     .form-group
-      button.signupbtn(type='submit') Login
-      button.cancelbtn(type='button') Cancel
+      button.signupbtn(type='submit' disabled=true id='submit_butt') Login
+      a(href='/')
+          button.cancelbtn(type='button') Cancel
     p Not a member yet?
     .form-group
-      button.patientbtn(type='button') Sign Up as Patient
-      button.doctorbtn(type='button') Sign Up as Doctor
+      a(href='/signup')
+          button.patientbtn(type='button') Sign Up
 include partials/footer.pug

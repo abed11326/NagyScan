@@ -39,6 +39,7 @@ const getPatHist = (pat_username)=>{
 };
 const getPatDis = (pat_username)=>{
     // TODO: function select diseases of a specific patient
+    return({hypt:'NO', diab:'No'});
 };
 async function searchUser(username){
     var state = 0;
