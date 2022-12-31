@@ -76,14 +76,39 @@ app.get('/home', async(req, res)=>{
         res.redirect('/login');
     }
 });
-app.get('/result', (req, res)=>{
+app.get('/result', async(req, res)=>{
     var req_tok = req.cookies.jwt;
     if(req_tok){
-
+        var req_data = verifyToken(req_tok);
+        if(req_data == 0){
+            res.redirect('/login');
+        }else{
+            var user = await dbControl.searchUser(req_data.id);
+            if(user.state==1){
+                if(user.entity=='d'){
+                    // res.render('result', {title:'Test Result', cssFile:'result'});
+                    var pun_tok = req.cookies.pun;
+                    if(pun_tok){
+                        var pun_data = verifyToken(pun_tok);
+                        if(pun_data == 0){
+                            res.redirect('/home');
+                        }else{
+                            var dis = await dbControl.getPatDis(pun_data.id);
+                            res.render('result', {title:'Test Result', cssFile:'result', hypt:dis.hypt, diab:dis.diab});
+                        }
+                    }else{
+                        res.redirect('/home');
+                    }
+                }else{
+                    res.redirect('/home');
+                }
+            }else{
+                res.redirect('/login');
+            }
+        }
     }else{
         res.redirect('/login');
     }
-    res.render('result', {title:'Test Result', cssFile:'result'});
 });
 
 
