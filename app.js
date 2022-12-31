@@ -151,8 +151,8 @@ app.post('/signup_p', async(req, res)=>{
 app.post('/scan', async(req, res)=>{
     var form = new formidable.IncomingForm();
     form.parse(req, function (err, fields, files) {
-      //res.write('File uploaded');
-      //res.end();
+      console.log(fields);
+      console.log(files);
     });
     res.redirect('/result');
 });
