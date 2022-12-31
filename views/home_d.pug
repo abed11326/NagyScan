@@ -1,9 +1,18 @@
-//- TODO: include head and nav_bar 
-
-
-//- TODO: implement body content
-
-
-//- TODO: include footer
-
-
+doctype html
+head
+  title Doctor Page
+  link(rel='stylesheet' href='home_d.css')
+  script(src='home_d.js')
+header
+  h1 Doctor Page
+.container
+  .file-upload
+    input#file-input(type='file')
+    img#preview(src='' alt='')
+    p Upload a photo
+  p
+    | This page is for COVID-19 diagnosis. Please make sure to follow all necessary protocols and guidelines for handling potential COVID-19 cases.
+  form
+    label(for='name') Patient&apos;s ID
+    input#name(type='text' placeholder='Enter patient ID')
+    input(type='submit' value='Submit')
