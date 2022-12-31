@@ -4,15 +4,16 @@ script(src='home_d.js')
 header
   h1 Welcome Dr.D
 .container
-  .file-upload
-    input#file-input(type='file')
-    img#preview(src='' alt='')
-    p Upload a photo
-  p
-    | This page is for COVID-19 diagnosis. Please make sure to follow all necessary protocols and guidelines for handling potential COVID-19 cases.
-  form
+  form(action='/scan' method='POST' enctype="multipart/form-data")
+    label(for='file-input') X-Ray Image
+    .file-upload
+      input#file-input(type='file' name='image')
+      img#preview(src='' alt='')
+      p Upload a photo
+    p
+      | This page is for COVID-19 diagnosis. Please make sure to follow all necessary protocols and guidelines for handling potential COVID-19 cases.
     label(for='name') Patient&apos;s ID
-    input#name(type='text' placeholder='Enter patient ID')
+    input#name(type='text' name='username' placeholder='Enter patient ID' required)
     input(type='submit' value='Submit')
 
 include partials/footer.pug

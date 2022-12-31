@@ -12,6 +12,8 @@ app.use(cookieParser());
 app.use(express.static(__dirname+'/public'));
 app.use(express.urlencoded({extended:true}));
 //app.use(express.json());
+const formidable = require('formidable');
+
 
 const maxAge = 100*24*60*60; // in seconds
 const createToken = (id)=>{
@@ -145,6 +147,14 @@ app.post('/signup_p', async(req, res)=>{
         await res.cookie('jwt', token, {maxAge:maxAge*1000});
         await res.redirect('/home');
     }
+});
+app.post('/scan', async(req, res)=>{
+    var form = new formidable.IncomingForm();
+    form.parse(req, function (err, fields, files) {
+      //res.write('File uploaded');
+      //res.end();
+    });
+    res.redirect('/result');
 });
 
 
