@@ -9,13 +9,21 @@ app.listen(9999);
 app.set('view engine', 'pug');
 app.set('views', __dirname+'/views');
 app.use(cookieParser());
-app.use(express.static('public'));
+app.use(express.static(__dirname+'/public'));
 app.use(express.urlencoded({extended:true}));
 //app.use(express.json());
 
 const maxAge = 100*24*60*60; // in seconds
 const createToken = (id)=>{
     return jwt.sign({id}, "Nagy@16-Aug-1995__&&__Haroon@06-Jan-1999", {expiresIn: maxAge});  
+};
+const verifyToken = (req_tok)=>{
+    try{
+        var req_data = jwt.verify(req_tok, "Nagy@16-Aug-1995__&&__Haroon@06-Jan-1999");
+        return req_data
+    }catch{
+        return 0;
+    }  
 };
 
 // GET requests
@@ -26,7 +34,17 @@ app.get('/about', (req, res)=>{
     res.render('about', {title:'About us', cssFile:'about'});
 });
 app.get('/login', (req, res)=>{
-    res.render('login', {title:'Log In', cssFile:'login'});
+    var req_tok = req.cookies.jwt;
+    if(req_tok){
+        var req_data = verifyToken(req_tok);
+        if(req_data == 0){
+            res.render('login', {title:'Log In', cssFile:'login'});
+        }else{
+            res.redirect('/home');
+        }
+    }else{
+        res.render('login', {title:'Log In', cssFile:'login'});
+    }
 });
 app.get('/signup_d', (req, res)=>{
     res.render('signup_d', {title:'Doctor Sign Up', cssFile:'signup'});
@@ -34,13 +52,35 @@ app.get('/signup_d', (req, res)=>{
 app.get('/signup_p', (req, res)=>{
     res.render('signup_p', {title:'Patient Sign Up', cssFile:'signup'});
 });
-app.get('/home_d', (req, res)=>{
-    res.render('home_d', {title:'Welcome'});
-});
-app.get('/home_p', (req, res)=>{
-    res.render('home_p', {title:'Welcome',cssFile:'home_p'});
+app.get('/home', async(req, res)=>{
+    var req_tok = req.cookies.jwt;
+    if(req_tok){
+        var req_data = verifyToken(req_tok);
+        if(req_data == 0){
+            res.redirect('/login');
+        }else{
+            var user = await dbControl.searchUser(req_data.id);
+            if(user.state==1){
+                if(user.entity=='d'){
+                    res.render('home_d', {title:'Welcome',cssFile:'home_d'});
+                }else{
+                    res.render('home_p', {title:'Welcome',cssFile:'home_p'});
+                }
+            }else{
+                res.redirect('/login');
+            }
+        }
+    }else{
+        res.redirect('/login');
+    }
 });
 app.get('/result', (req, res)=>{
+    var req_tok = req.cookies.jwt;
+    if(req_tok){
+
+    }else{
+        res.redirect('/login');
+    }
     res.render('result', {title:'Test Result', cssFile:'result'});
 });
 
@@ -54,12 +94,8 @@ app.post('/login', async (req, res)=>{
         var auth = bcrypt.compareSync(password, user.stored_password);
         if(auth){
             var token = createToken(username);
-            res.cookie('jwt', token, {maxAge:maxAge*1000});
-            if(user.entity=='d'){
-                res.redirect('/home_d');
-            }else if(user.entity=='p'){
-                res.redirect('/home_p');
-            }
+            await res.cookie('jwt', token, {maxAge:maxAge*1000});
+            res.redirect('/home');
         } else{
             // TODO: handle incorrect password
         }
@@ -76,14 +112,14 @@ app.post('/signup_d', async(req, res)=>{
     else{
         var salt = bcrypt.genSaltSync();
         password = bcrypt.hashSync(password, salt);
-        dbControl.addUser({
+        await dbControl.addUser({
             username: username, 
             password:password, 
             entity:'d'
         });
-        var token = createToken(username);
-        res.cookie('jwt', token, {maxAge:maxAge*1000});
-        res.redirect('/home_d');
+        var token = await createToken(username);
+        await res.cookie('jwt', token, {maxAge:maxAge*1000});
+        await res.redirect('/home');
     }
 });
 app.post('/signup_p', async(req, res)=>{
@@ -98,17 +134,16 @@ app.post('/signup_p', async(req, res)=>{
     else{
         var salt = bcrypt.genSaltSync();
         password = bcrypt.hashSync(password, salt);
-        // TODO: test the below function
-        dbControl.addUser({
+        await dbControl.addUser({
             username: username, 
             password:password, 
             entity:'p', 
             hypertension:hypertension, 
             diabetes:diabetes
         });
-        var token = createToken(username);
-        res.cookie('jwt', token, {maxAge:maxAge*1000});
-        res.redirect('/home_p');
+        var token = await createToken(username);
+        await res.cookie('jwt', token, {maxAge:maxAge*1000});
+        await res.redirect('/home');
     }
 });
 

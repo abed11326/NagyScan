@@ -9,12 +9,12 @@ const connection = mysql.createConnection({
 });
 
 // add a new user based on entity
-const addUser = (user)=>{
+async function addUser(user){
     var username = user.username;
     var password = user.password;
     var entity = user.entity;
     if(entity=='d'){
-        connection.query(
+        await (await connection).query(
             `INSERT INTO Doctor (user_name, password) VALUES ("${username}", "${password}");`
         );
     } else if(entity=='p'){
@@ -26,7 +26,7 @@ const addUser = (user)=>{
         if(diabetes=='diabetes'){
             diabetes='Yes';
         }
-        connection.query(
+        await (await connection).query(
             `INSERT INTO Patient (user_name, password, Hypertension, Diabetes) VALUES ("${username}", "${password}", "${hypertension}", "${diabetes}");`
         );
     } 
@@ -66,18 +66,7 @@ async function searchUser(username){
     }
     return {state, stored_password, entity};
 };
-// const SelectAllElements = (username) =>{
-//     return new Promise((resolve, reject)=>{
-//         connection.query(`SELECT * from Doctor WHERE user_name = "${username}"`,  (error, elements)=>{
-//             if(error){
-//                 return reject(error);
-//             }
-//             return resolve(elements);
-//         });
-//     });
-// };
 module.exports = {
-    connection,
     addUser,
     addScan,
     getPatHist,
