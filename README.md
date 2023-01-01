@@ -16,7 +16,7 @@ Features:
 
 Installation
 To install NagyScan, follow these steps:
-1.	Clone the NagyScan repository from GitHub: git clone https://github.com/nagyscan/nagyscan.git
+1.	Clone the NagyScan repository from GitHub: git clone (https://github.com/abed11326/-8.git)
 2.	Install the required dependencies: npm install
 3.	Start the NagyScan server: nodemon app.js
 
