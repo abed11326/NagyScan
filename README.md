@@ -16,9 +16,9 @@ Features:
 
 Installation
 To install NagyScan, follow these steps:
-1.	Clone the NagyScan repository from GitHub: git clone (https://github.com/abed11326/-8.git)
-2.	Install the required dependencies: npm install
-3.	Start the NagyScan server: nodemon app.js
+1.Clone the NagyScan repository from GitHub: git clone (https://github.com/abed11326/-8.git)
+2.Install the required dependencies: npm install
+3.Start the NagyScan server: nodemon app.js
 
 Usage
 To use NagyScan, visit the website and log in as a patient or doctor. Patients can view their results and medical history, and doctors can upload images for analysis, access patient information, and receive diagnoses from the machine learning model.
