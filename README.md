@@ -2,17 +2,17 @@ NagyScan
 NagyScan is a comprehensive platform designed to diagnose patients using X-ray technology and machine learning algorithms, 
 with a focus on detecting COVID-19. The website features a range of pages and tools, including a login page for patients and doctors, a results page for patients, and a page for doctors to upload photos and X-rays, access patient information and medical histories, and receive diagnoses from the machine learning model.
 
-Features
-•	Machine learning model for analyzing X-rays and providing diagnoses
-•	Upload functionality for doctors to upload images for analysis
-•	Database integration for storing and retrieving diagnoses
-•	Results page for patients to access their diagnoses and treatment recommendations
-•	Medical history page for patients to provide their medical history
-•	Patient information page for doctors to access patient information and medical histories
-•	Appointments feature for scheduling X-ray diagnoses
-•	Image annotation for doctors to annotate uploaded images
-•	Model training to improve the accuracy of the machine learning model
-•	Model performance evaluation to identify areas for improvement
+Features:
+•Machine learning model for analyzing X-rays and providing diagnoses
+•Upload functionality for doctors to upload images for analysis
+•Database integration for storing and retrieving diagnoses
+•Results page for patients to access their diagnoses and treatment recommendations
+•Medical history page for patients to provide their medical history
+•Patient information page for doctors to access patient information and medical histories
+•Appointments feature for scheduling X-ray diagnoses
+•Image annotation for doctors to annotate uploaded images
+•Model training to improve the accuracy of the machine learning model
+•Model performance evaluation to identify areas for improvement
 
 Installation
 To install NagyScan, follow these steps:
