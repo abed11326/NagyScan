@@ -2,10 +2,10 @@ const mysql = require('mysql2/promise');
 
 // create the connection to database
 const connection = mysql.createConnection({
-  host: 'cai.aast.edu',
-  user: 'web_8',
-  password: '9139',
-  database: 'web_8'
+  host: 'secret',
+  user: 'secret',
+  password: 'secret',
+  database: 'secret'
 });
 
 // add a new user based on entity

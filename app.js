@@ -16,18 +16,18 @@ const formidable = require('formidable');
 // handle tokens
 const maxAge = 100*24*60*60; // in seconds
 const createToken = (id)=>{
-    return jwt.sign({id}, "Nagy@16-Aug-1995__&&__Haroon@06-Jan-1999", {expiresIn: maxAge});  
+    return jwt.sign({id}, "secret", {expiresIn: maxAge});  
 };
 const verifyToken = (req_tok)=>{
     try{
-        var req_data = jwt.verify(req_tok, "Nagy@16-Aug-1995__&&__Haroon@06-Jan-1999");
+        var req_data = jwt.verify(req_tok, "secret");
         return req_data
     }catch{
         return 0;
     }  
 };
 
-// ML Model: To Be Verified
+// TODO: ML Model 
 /*
 function ML_model(image){
     import * as tf from '@tensorflow/tfjs';
