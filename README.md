@@ -13,9 +13,9 @@ The website features a range of pages and tools, including a login page for pati
 </ul>
 
 <h2>Installation</h2> 
-To install NagyScan: 
+To install NagyScan:  
 <ol>
 <li>Clone the repository.</li>
-<li>Install the required dependencies with the command: ```npm install``` </li>
-<li>Start the server with the command: ```nodemon app.js``` </li>
+<li>Install the required dependencies with the command: npm install </li>
+<li>Start the server with the command: nodemon app.js </li>
 </ol>
